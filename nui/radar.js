@@ -667,20 +667,20 @@ function sendSaveData()
 		let data = 
 		{
 			remote: {
-				left: elements.remote.css( "left" ),
-				top: elements.remote.css( "top" ),
+				left: elements.remote[0].style.left,
+				top: elements.remote[0].style.top,
 				scale: remoteScale
 			},
 
 			radar: {
-				left: elements.radar.css( "left" ),
-				top: elements.radar.css( "top" ),
+				left: elements.radar[0].style.left,
+				top: elements.radar[0].style.top,
 				scale: radarScale
 			},
 
 			plateReader: {
-				left: elements.plateReader.css( "left" ),
-				top: elements.plateReader.css( "top" ),
+				left: elements.plateReader[0].style.left,
+				top: elements.plateReader[0].style.top,
 				scale: readerScale
 			},
 
@@ -706,6 +706,8 @@ function loadUiSettings( data, isSave )
 			{
 				// Update the position of the current element 
 				ele.css( i, data[setting][i] );
+
+				console.log( data[setting][i] );
 			}
 		
 			// Set the scale and update the display
@@ -944,11 +946,15 @@ $( document ).mousemove( function( event ) {
 $( window ).resize( function() {
 	windowWidth = $( this ).width(); 
 	windowHeight = $( this ).height(); 
+
+	console.log( "Resize event: " + "\tWidth: " + windowWidth + "   Height: " + windowHeight );
 } )
 
 $( document ).ready( function() {
 	windowWidth = $( window ).width(); 
 	windowHeight = $( window ).height();
+
+	console.log( "Ready event: " + "\tWidth: " + windowWidth + "   Height: " + windowHeight );
 } )
 
 elements.safezoneSlider.on( "input", function() {
@@ -977,7 +983,7 @@ function calculatePos( ele, x, y, w, h, offset, scale, safezone )
 	let topPos = ( top / h ) * 100; 
 
 	let leftLockGap = leftPos + eleWidthPerctHalf; 
-	let topLockGap = topPos + eleHeightPerctHalf;
+	let topLockGap = topPos + eleHeightPerctHalf; 
 
 	// Lock pos check 
 	if ( leftLockGap >= 49.0 && leftLockGap <= 51.0 ) 
@@ -996,8 +1002,8 @@ function calculatePos( ele, x, y, w, h, offset, scale, safezone )
 
 function updatePosition( ele, left, top )
 {
-	ele.css( "left", left + "%" );
-	ele.css( "top", top + "%" );
+	ele.css( "left", "calc( " + left.toFixed( 3 ) + "% )" );
+	ele.css( "top", "calc( " + top.toFixed( 3 ) + "% )" );
 }
 
 function getOffset( offset, x, y )

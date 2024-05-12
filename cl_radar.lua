@@ -1589,6 +1589,36 @@ end )
 -- Runs when the JavaScript side sends the UI data for saving
 RegisterNUICallback( "saveUiData", function( data, cb )
 	UTIL:Log( "Saving updated UI settings data." )
+
+	-- Get the current saved UI data, then we can compare with the new data and find out what's changed
+	local currentData = GetResourceKvpString( "wk_wars2x_ui_data" )
+
+	-- Make sure the data exists
+	if ( currentData ~= nil ) then 
+		local cdd = json.decode( currentData )
+
+		for v in UTIL:Values( { "remote", "radar", "plateReader" } ) do 
+			print( "-", v )
+
+			print( "\tOld: (top) " .. cdd[v].top .. "   (left) " .. cdd[v].left .. "   (scale) " .. cdd[v].scale )
+			print( "\tNew: (top) " .. data[v].top .. "   (left) " .. data[v].left .. "   (scale) " .. data[v].scale )
+		end
+	else
+		print( "no saved data" )
+	end 
+
+	--[[ for k, v in pairs( data ) do 
+		print( k, " - ", v )
+		
+		if ( type( v ) == "table" ) then
+			for o, i in pairs( v ) do
+				print( "\t", o, "-", i )
+			end
+		end
+	end ]]
+
+	print( data["remote"] )
+
 	SetResourceKvp( "wk_wars2x_ui_data", json.encode( data ) )
 	cb( "ok" )
 end )
